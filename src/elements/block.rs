@@ -20,23 +20,23 @@ impl Component for Block {
     type Message = ();
     type Properties = BlockProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx:Context, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self,ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
         let mut classes = Classes::from("block");
         classes.push(&self.props.classes);
         html! {
-            <div class=classes>
+            <div class={classes}>
                 {self.props.children.clone()}
             </div>
         }

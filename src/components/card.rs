@@ -20,30 +20,29 @@ impl Component for Card {
     type Message = ();
     type Properties = CardProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: &Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: Context) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
         let mut classes = Classes::from("card");
         classes.push(&self.props.classes);
         html! {
-            <div class=classes>
+            <div class={classes}>
                 {self.props.children.clone()}
             </div>
         }
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 #[derive(Clone, Debug, Properties, PartialEq)]
@@ -65,30 +64,29 @@ impl Component for CardHeader {
     type Message = ();
     type Properties = CardHeaderProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: Context) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
         let mut classes = Classes::from("card-header");
         classes.push(&self.props.classes);
         html! {
-            <header class=classes>
+            <header class={classes}>
                 {self.props.children.clone()}
             </header>
         }
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 #[derive(Clone, Debug, Properties, PartialEq)]
@@ -110,30 +108,29 @@ impl Component for CardImage {
     type Message = ();
     type Properties = CardImageProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: Context) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn change(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
         let mut classes = Classes::from("card-image");
         classes.push(&self.props.classes);
         html! {
-            <div class=classes>
+            <div class={classes}>
                 {self.props.children.clone()}
             </div>
         }
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 #[derive(Clone, Debug, Properties, PartialEq)]
@@ -155,30 +152,29 @@ impl Component for CardContent {
     type Message = ();
     type Properties = CardContentProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, ctx: Context) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
         let mut classes = Classes::from("card-content");
         classes.push(&self.props.classes);
         html! {
-            <div class=classes>
+            <div class={classes}>
                 {self.props.children.clone()}
             </div>
         }
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 #[derive(Clone, Debug, Properties, PartialEq)]
@@ -200,23 +196,23 @@ impl Component for CardFooter {
     type Message = ();
     type Properties = CardFooterProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: Context) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
         let mut classes = Classes::from("card-footer");
         classes.push(&self.props.classes);
         html! {
-            <footer class=classes>
+            <footer class={classes}>
                 {self.props.children.clone()}
             </footer>
         }

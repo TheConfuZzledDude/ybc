@@ -1,8 +1,11 @@
 #![allow(clippy::redundant_closure_call)]
 
 use derive_more::Display;
-use yew::events::InputData;
+use web_sys::HtmlInputElement;
+use yew::events::Event;
+use yew::html::Scope;
 use yew::prelude::*;
+use yew::TargetCast;
 use yewtil::NeqAssign;
 
 use crate::Size;
@@ -53,24 +56,24 @@ pub struct InputProps {
 /// component via callback.
 pub struct Input {
     props: InputProps,
-    link: ComponentLink<Self>,
+    link: Scope,
 }
 
 impl Component for Input {
     type Message = String;
     type Properties = InputProps;
 
-    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { props, link }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props(), link: ctx.link() }
     }
 
-    fn update(&mut self, msg: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: Context, msg: Self::Message) -> bool {
         self.props.update.emit(msg);
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
@@ -90,14 +93,14 @@ impl Component for Input {
         }
         html! {
             <input
-                name=self.props.name.clone()
-                value=self.props.value.clone()
-                oninput=self.link.callback(|input: InputData| input.value)
-                class=classes
-                type=self.props.r#type.to_string()
-                placeholder=self.props.placeholder.clone()
-                disabled=self.props.disabled
-                readonly=self.props.readonly
+                name={self.props.name.clone()}
+                value={self.props.value.clone()}
+                oninput={self.link.callback(|e: Event| e.target_unchecked_into::<HtmlInputElement>().value())}
+                class={classes}
+                type={self.props.r#type.to_string()}
+                placeholder={self.props.placeholder.clone()}
+                disabled={self.props.disabled}
+                readonly={self.props.readonly}
                 />
         }
     }

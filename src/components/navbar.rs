@@ -1,7 +1,7 @@
 #![allow(clippy::redundant_closure_call)]
 
 use derive_more::Display;
-use yew::prelude::*;
+use yew::{html::Scope, prelude::*};
 use yewtil::NeqAssign;
 
 use crate::components::dropdown::DropdownMsg;
@@ -25,7 +25,8 @@ pub struct NavbarProps {
     /// [https://bulma.io/documentation/components/navbar/#transparent-navbar](https://bulma.io/documentation/components/navbar/#transparent-navbar)
     #[prop_or_default]
     pub transparent: bool,
-    /// Sets **top** and **bottom** paddings with **1rem**, **left** and **right** paddings with **2rem**.
+    /// Sets **top** and **bottom** paddings with **1rem**, **left** and **right** paddings with
+    /// **2rem**.
     ///
     /// [https://bulma.io/documentation/components/navbar/#navbar-helper-classes](https://bulma.io/documentation/components/navbar/#navbar-helper-classes)
     #[prop_or_default]
@@ -59,7 +60,7 @@ pub struct NavbarProps {
 /// [https://bulma.io/documentation/components/navbar/](https://bulma.io/documentation/components/navbar/)
 pub struct Navbar {
     props: NavbarProps,
-    link: ComponentLink<Self>,
+    link: Scope,
     is_menu_open: bool,
 }
 
@@ -67,11 +68,15 @@ impl Component for Navbar {
     type Message = NavbarMsg;
     type Properties = NavbarProps;
 
-    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { props, link, is_menu_open: false }
+    fn create(ctx: Context) -> Self {
+        Self {
+            props: ctx.props(),
+            link: ctx.link(),
+            is_menu_open: false,
+        }
     }
 
-    fn update(&mut self, msg: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: Context, msg: Self::Message) -> bool {
         match msg {
             NavbarMsg::ToggleMenu => {
                 self.is_menu_open = !self.is_menu_open;
@@ -80,8 +85,8 @@ impl Component for Navbar {
         true
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
@@ -107,7 +112,7 @@ impl Component for Navbar {
                     {navbrand.clone()}
                     {if self.props.navburger {
                         html! {
-                            <a class=burgerclasses onclick=togglecb
+                            <a class={burgerclasses} onclick={togglecb}
                                 role="button" aria-label="menu"
                                 aria-expanded={if self.is_menu_open { "true" } else { "false" }}
                             >
@@ -137,7 +142,7 @@ impl Component for Navbar {
         let contents = html! {
             <>
             {navbrand}
-            <div class=navclasses>
+            <div class={navclasses}>
                 {navstart}
                 {navend}
             </div>
@@ -146,13 +151,13 @@ impl Component for Navbar {
 
         if self.props.padded {
             html! {
-                <nav class=classes role="navigation" aria-label="main navigation">
+                <nav class={classes} role="navigation" aria-label="main navigation">
                     <div class="container">{contents}</div>
                 </nav>
             }
         } else {
             html! {
-                <nav class=classes role="navigation" aria-label="main navigation">{contents}</nav>
+                <nav class={classes} role="navigation" aria-label="main navigation">{contents}</nav>
             }
         }
     }
@@ -173,7 +178,6 @@ pub enum NavbarFixed {
     Bottom,
 }
 
-//////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 /// The two HTML tags allowed for a navbar-item.
@@ -231,16 +235,16 @@ impl Component for NavbarItem {
     type Message = ();
     type Properties = NavbarItemProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, ctx: Context, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
@@ -263,10 +267,10 @@ impl Component for NavbarItem {
             NavbarItemTag::A => {
                 html! {
                     <a
-                        class=classes
-                        href=self.props.href.clone().unwrap_or_default()
-                        rel=self.props.rel.clone().unwrap_or_default()
-                        target=self.props.target.clone().unwrap_or_default()
+                        class={classes}
+                        href={self.props.href.clone().unwrap_or_default()}
+                        rel={self.props.rel.clone().unwrap_or_default()}
+                        target={self.props.target.clone().unwrap_or_default()}
                     >
                         {self.props.children.clone()}
                     </a>
@@ -274,7 +278,7 @@ impl Component for NavbarItem {
             }
             NavbarItemTag::Div => {
                 html! {
-                    <div class=classes>
+                    <div class={classes}>
                         {self.props.children.clone()}
                     </div>
                 }
@@ -283,7 +287,6 @@ impl Component for NavbarItem {
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 #[derive(Clone, Debug, Properties, PartialEq)]
@@ -303,28 +306,27 @@ impl Component for NavbarDivider {
     type Message = ();
     type Properties = NavbarDividerProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, ctx: Context, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
         let mut classes = Classes::from("navbar-divider");
         classes.push(&self.props.classes);
         html! {
-            <hr class=classes/>
+            <hr class={classes}/>
         }
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 #[derive(Clone, Debug, Properties, PartialEq)]
@@ -361,7 +363,7 @@ pub struct NavbarDropdownProps {
 /// [https://bulma.io/documentation/components/navbar/#dropdown-menu](https://bulma.io/documentation/components/navbar/#dropdown-menu)
 pub struct NavbarDropdown {
     props: NavbarDropdownProps,
-    link: ComponentLink<Self>,
+    link: Scope,
     is_menu_active: bool,
 }
 
@@ -369,11 +371,15 @@ impl Component for NavbarDropdown {
     type Message = DropdownMsg;
     type Properties = NavbarDropdownProps;
 
-    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { props, link, is_menu_active: false }
+    fn create(ctx: Context) -> Self {
+        Self {
+            props: ctx.props(),
+            link: ctx.link(),
+            is_menu_active: false,
+        }
     }
 
-    fn update(&mut self, msg: Self::Message) -> ShouldRender {
+    fn update(&mut self, ctx: Context, msg: Self::Message) -> bool {
         if self.props.hoverable {
             return false;
         }
@@ -384,8 +390,8 @@ impl Component for NavbarDropdown {
         true
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
@@ -419,15 +425,15 @@ impl Component for NavbarDropdown {
         };
         let overlay = if self.is_menu_active {
             classes.push("is-active");
-            html! {<div onclick=self.link.callback(|_| DropdownMsg::Close) style="z-index:10;background-color:rgba(0,0,0,0);position:fixed;top:0;bottom:0;left:0;right:0;"></div>}
+            html! {<div onclick={self.link.callback(|_| DropdownMsg::Close)} style="z-index:10;background-color:rgba(0,0,0,0);position:fixed;top:0;bottom:0;left:0;right:0;"></div>}
         } else {
             html! {}
         };
         html! {
-            <div class=classes>
+            <div class={classes}>
                 {overlay}
-                <a class=linkclasses onclick=opencb>{self.props.navlink.clone()}</a>
-                <div class=dropclasses>
+                <a class={linkclasses} onclick={opencb}>{self.props.navlink.clone()}</a>
+                <div class={dropclasses}>
                     {self.props.children.clone()}
                 </div>
             </div>

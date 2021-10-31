@@ -1,6 +1,6 @@
 #![allow(clippy::redundant_closure_call)]
 
-use yew::prelude::*;
+use yew::{html::IntoPropValue, prelude::*};
 use yewtil::NeqAssign;
 
 #[derive(Clone, Debug, Properties, PartialEq)]
@@ -25,30 +25,29 @@ impl Component for Level {
     type Message = ();
     type Properties = LevelProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: Context, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
         let mut classes = Classes::from("level");
         classes.push(&self.props.classes);
         html! {
-            <@{self.props.tag.clone()} class=classes>
+            <@{self.props.tag.clone()} class={classes}>
                 {self.props.children.clone()}
             </@>
         }
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 #[derive(Clone, Debug, Properties, PartialEq)]
@@ -73,30 +72,29 @@ impl Component for LevelLeft {
     type Message = ();
     type Properties = LevelLeftProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: Context, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
         let mut classes = Classes::from("level-left");
         classes.push(&self.props.classes);
         html! {
-            <@{self.props.tag.clone()} class=classes>
+            <@{self.props.tag.clone()} class={classes}>
                 {self.props.children.clone()}
             </@>
         }
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 #[derive(Clone, Debug, Properties, PartialEq)]
@@ -121,30 +119,29 @@ impl Component for LevelRight {
     type Message = ();
     type Properties = LevelRightProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: Context, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
         let mut classes = Classes::from("level-right");
         classes.push(&self.props.classes);
         html! {
-            <@{self.props.tag.clone()} class=classes>
+            <@{self.props.tag.clone()} class={classes}>
                 {self.props.children.clone()}
             </@>
         }
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
 #[derive(Clone, Debug, Properties, PartialEq)]
@@ -169,23 +166,23 @@ impl Component for LevelItem {
     type Message = ();
     type Properties = LevelItemProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self,_ctx: Context, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx:Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
         let mut classes = Classes::from("level-item");
         classes.push(&self.props.classes);
         html! {
-            <@{self.props.tag.clone()} class=classes>
+            <@{self.props.tag.clone()} class={classes}>
                 {self.props.children.clone()}
             </@>
         }

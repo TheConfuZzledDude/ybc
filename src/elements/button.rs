@@ -25,16 +25,16 @@ impl Component for Buttons {
     type Message = ();
     type Properties = ButtonsProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, ctx: Context, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
@@ -44,7 +44,7 @@ impl Component for Buttons {
             classes.push(&size.to_string());
         }
         html! {
-            <div class=classes>
+            <div class={classes}>
                 {self.props.children.clone()}
             </div>
         }
@@ -99,16 +99,16 @@ impl Component for Button {
     type Message = ();
     type Properties = ButtonProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, ctx: Context, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
@@ -121,7 +121,7 @@ impl Component for Button {
             classes.push("is-static")
         }
         html! {
-            <button class=classes onclick=self.props.onclick.clone() disabled=self.props.disabled>
+            <button class={classes} onclick={self.props.onclick.clone()} disabled={self.props.disabled}>
                 {self.props.children.clone()}
             </button>
         }
@@ -168,16 +168,16 @@ mod router {
         type Message = ();
         type Properties = ButtonRouterProps<SW>;
 
-        fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-            Self { props, marker: std::marker::PhantomData }
+        fn create(ctx: Context) -> Self {
+            Self { props: ctx.props(), marker: std::marker::PhantomData }
         }
 
-        fn update(&mut self, _: Self::Message) -> ShouldRender {
+        fn update(&mut self, ctx: Context, _: Self::Message) -> bool {
             false
         }
 
-        fn change(&mut self, props: Self::Properties) -> ShouldRender {
-            self.props.neq_assign(props)
+        fn changed(&mut self, ctx: Context) -> bool {
+            self.props.neq_assign(ctx.props())
         }
 
         #[allow(deprecated)]
@@ -191,10 +191,10 @@ mod router {
             }
             html! {
                 <RouterBtn<SW, STATE>
-                    route=self.props.route.clone()
-                    disabled=self.props.disabled
-                    classes=classes.to_string()
-                    children=self.props.children.clone()
+                    route={self.props.route.clone()}
+                    disabled={self.props.disabled}
+                    classes={classes.to_string()}
+                    children={self.props.children.clone()}
                 />
             }
         }
@@ -210,16 +210,16 @@ mod router {
         type Message = ();
         type Properties = ButtonRouterProps<SW>;
 
-        fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-            Self { props, marker: std::marker::PhantomData }
+        fn create(ctx: Context) -> Self {
+            Self { props: ctx.props(), marker: std::marker::PhantomData }
         }
 
-        fn update(&mut self, _: Self::Message) -> ShouldRender {
+        fn update(&mut self, ctx: Context, _: Self::Message) -> bool {
             false
         }
 
-        fn change(&mut self, props: Self::Properties) -> ShouldRender {
-            self.props.neq_assign(props)
+        fn changed(&mut self, ctx: Context) -> bool {
+            self.props.neq_assign(ctx.props())
         }
 
         #[allow(deprecated)]
@@ -233,10 +233,10 @@ mod router {
             }
             html! {
                 <RouterAnchor<SW, STATE>
-                    route=self.props.route.clone()
-                    disabled=self.props.disabled
-                    classes=classes.to_string()
-                    children=self.props.children.clone()
+                    route={self.props.route.clone()}
+                    disabled={self.props.disabled}
+                    classes={classes.to_string()}
+                    children={self.props.children.clone()}
                 />
             }
         }
@@ -289,16 +289,16 @@ impl Component for ButtonAnchor {
     type Message = ();
     type Properties = ButtonAnchorProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, ctx: Context, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
@@ -312,12 +312,12 @@ impl Component for ButtonAnchor {
         }
         html! {
             <a
-                class=classes
-                onclick=self.props.onclick.clone()
-                href=self.props.href.clone()
-                rel=self.props.rel.clone().unwrap_or_default()
-                target=self.props.target.clone().unwrap_or_default()
-                disabled=self.props.disabled
+                class={classes}
+                onclick={self.props.onclick.clone()}
+                href={self.props.href.clone()}
+                rel={self.props.rel.clone().unwrap_or_default()}
+                target={self.props.target.clone().unwrap_or_default()}
+                disabled={self.props.disabled}
             >
                 {self.props.children.clone()}
             </a>
@@ -357,16 +357,16 @@ impl Component for ButtonInputSubmit {
     type Message = ();
     type Properties = ButtonInputSubmitProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, ctx: Context, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
@@ -379,7 +379,7 @@ impl Component for ButtonInputSubmit {
             classes.push("is-static")
         }
         html! {
-            <input type="submit" class=classes onsubmit=self.props.onsubmit.clone() disabled=self.props.disabled/>
+            <input type="submit" class={classes} onsubmit={self.props.onsubmit.clone()} disabled={self.props.disabled}/>
         }
     }
 }
@@ -416,16 +416,16 @@ impl Component for ButtonInputReset {
     type Message = ();
     type Properties = ButtonInputResetProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, ctx: Context, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
@@ -438,7 +438,7 @@ impl Component for ButtonInputReset {
             classes.push("is-static")
         }
         html! {
-            <input type="reset" class=classes onreset=self.props.onreset.clone() disabled=self.props.disabled/>
+            <input type="reset" class={classes} onreset={self.props.onreset.clone()} disabled={self.props.disabled}/>
         }
     }
 }

@@ -1,8 +1,8 @@
 #![allow(clippy::redundant_closure_call)]
 
-use web_sys::File as SysFile;
-use yew::events::ChangeData;
+use web_sys::{File as SysFile, HtmlInputElement};
 use yew::prelude::*;
+use yew::{events::Event, html::Scope};
 use yewtil::NeqAssign;
 
 use crate::{Alignment, Size};
@@ -59,24 +59,24 @@ pub struct FileProps {
 /// component via callback.
 pub struct File {
     props: FileProps,
-    link: ComponentLink<Self>,
+    link: Scope,
 }
 
 impl Component for File {
     type Message = Vec<SysFile>;
     type Properties = FileProps;
 
-    fn create(props: Self::Properties, link: ComponentLink<Self>) -> Self {
-        Self { props, link }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props(), link: ctx.link() }
     }
 
-    fn update(&mut self, msg: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: Context, msg: Self::Message) -> bool {
         self.props.update.emit(msg);
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
@@ -107,19 +107,19 @@ impl Component for File {
             .map(|file| html! {<span class="file-name">{file.name()}</span>})
             .collect::<Vec<_>>();
         html! {
-            <div class=classes>
+            <div class={classes}>
                 <label class="file-label">
                     <input
                         type="file"
                         class="file-input"
-                        name=self.props.name.clone()
-                        multiple=self.props.multiple
-                        onchange=self.link.callback(|data: ChangeData| match data {
-                            ChangeData::Files(list) => (0..list.length()).into_iter()
+                        name={self.props.name.clone()}
+                        multiple={self.props.multiple}
+                        onchange={self.link.callback(|e: Event| match e.target_unchecked_into::<HtmlInputElement>().files() {
+                            Some(list) => (0..list.length()).into_iter()
                                 .filter_map(|idx| list.item(idx))
                                 .collect::<Vec<_>>(),
-                            _ => unreachable!("invariant violation: received non-file change event from a file input element"),
-                        })
+                            None => unreachable!("invariant violation: received non-file change event from a file input element"),
+                        })}
                         />
                     <span class="file-cta">
                         <span class="file-icon">

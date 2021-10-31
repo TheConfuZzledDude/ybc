@@ -43,16 +43,16 @@ impl Component for Tabs {
     type Message = ();
     type Properties = TabsProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.prop() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: Context, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
@@ -77,7 +77,7 @@ impl Component for Tabs {
             classes.push("is-fullwidth");
         }
         html! {
-            <div class=classes>
+            <div class={classes}>
                 <ul>
                     {self.props.children.clone()}
                 </ul>

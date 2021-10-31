@@ -28,16 +28,16 @@ impl Component for Delete {
     type Message = ();
     type Properties = DeleteProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, ctx: Context, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
@@ -45,7 +45,7 @@ impl Component for Delete {
         classes.push(&self.props.classes);
         let tag = self.props.tag.clone();
         html! {
-            <@{tag} class=classes onclick=self.props.onclick.clone()>
+            <@{tag} class={classes} onclick={self.props.onclick.clone()}>
                 {self.props.children.clone()}
             </@>
         }

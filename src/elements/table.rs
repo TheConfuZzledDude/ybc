@@ -38,16 +38,16 @@ impl Component for Table {
     type Message = ();
     type Properties = TableProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, ctx: Context, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
@@ -71,14 +71,14 @@ impl Component for Table {
         if self.props.scrollable {
             html! {
                 <div class="table-container">
-                    <table class=classes>
+                    <table class={classes}>
                         {self.props.children.clone()}
                     </table>
                 </div>
             }
         } else {
             html! {
-                <table class=classes>
+                <table class={classes}>
                     {self.props.children.clone()}
                 </table>
             }

@@ -58,16 +58,16 @@ impl Component for Field {
     type Message = ();
     type Properties = FieldProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: Context,_: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
@@ -103,13 +103,13 @@ impl Component for Field {
                     if self.props.horizontal {
                         label_classes.push("field-label");
                         html! {
-                            <div class=label_classes>
+                            <div class={label_classes}>
                                 <label class="label">{label_content.clone()}</label>
                             </div>
                         }
                     } else {
                         label_classes.push("label");
-                        html! {<label class=label_classes>{label_content.clone()}</label>}
+                        html! {<label class={label_classes}>{label_content.clone()}</label>}
                     }
                 }
                 None => {
@@ -132,14 +132,14 @@ impl Component for Field {
                     if self.props.help_has_error {
                         help_classes.push("is-danger");
                     }
-                    html! {<label class=help_classes>{help_content.clone()}</label>}
+                    html! {<label class={help_classes}>{help_content.clone()}</label>}
                 }
                 None => {
                     let mut help_classes = Classes::from("help");
                     if self.props.help_has_error {
                         help_classes.push("is-danger");
                     }
-                    html! {<label class=help_classes>{help_content.clone()}</label>}
+                    html! {<label class={help_classes}>{help_content.clone()}</label>}
                 }
             },
             None => html! {},
@@ -152,7 +152,7 @@ impl Component for Field {
         }
 
         html! {
-            <div class=classes>
+            <div class={classes}>
                 {label}
                 {body}
                 {help}

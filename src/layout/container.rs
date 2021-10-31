@@ -23,16 +23,16 @@ impl Component for Container {
     type Message = ();
     type Properties = ContainerProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: Context) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: Context) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: Context) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
     fn view(&self) -> Html {
@@ -42,7 +42,7 @@ impl Component for Container {
             classes.push("is-fluid");
         }
         html! {
-            <div class=classes>
+            <div class={classes}>
                 {self.props.children.clone()}
             </div>
         }

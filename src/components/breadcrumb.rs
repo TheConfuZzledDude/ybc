@@ -33,19 +33,19 @@ impl Component for Breadcrumb {
     type Message = ();
     type Properties = BreadcrumbProps;
 
-    fn create(props: Self::Properties, _: ComponentLink<Self>) -> Self {
-        Self { props }
+    fn create(ctx: &Context<Self>) -> Self {
+        Self { props: ctx.props() }
     }
 
-    fn update(&mut self, _: Self::Message) -> ShouldRender {
+    fn update(&mut self, _ctx: &Context<_>, _: Self::Message) -> bool {
         false
     }
 
-    fn change(&mut self, props: Self::Properties) -> ShouldRender {
-        self.props.neq_assign(props)
+    fn changed(&mut self, ctx: &Context<Self>) -> bool {
+        self.props.neq_assign(ctx.props())
     }
 
-    fn view(&self) -> Html {
+    fn view(&self, ctx: &Context<Self>) -> Html {
         let mut classes = Classes::from("breadcrumb");
         classes.push(&self.props.classes);
         if let Some(size) = &self.props.size {
@@ -57,8 +57,9 @@ impl Component for Breadcrumb {
         if let Some(separator) = &self.props.separator {
             classes.push(&separator.to_string());
         }
+
         html! {
-            <nav class=classes aria-label="breadcrumbs">
+            <nav class={classes} aria-label="breadcrumbs">
                 <ul>
                     {self.props.children.clone()}
                 </ul>
